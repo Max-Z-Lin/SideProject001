@@ -20,9 +20,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', 'UserController@register')->name('user.register');
 Route::post('login', 'UserController@login');
 
-Route::group(['middleware' => ['jwt.verify']], function() {
+Route::get('mail', 'UserController@sendMail');
+
+Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('getUser', 'UserController@getAuthUser');
     Route::post('updateUser', 'UserController@updateAuthUser');
     Route::delete('deleteUser', 'UserController@softDelete');
+
+    Route::group(['prefix' => 'image'], function () {
+        Route::post('upload', 'ImageController@uploadImage');
+        Route::get('read', 'ImageController@readImage');
+    });
+
 
 });

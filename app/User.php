@@ -65,4 +65,11 @@ class User extends Authenticatable implements  JWTSubject
         // TODO: Implement getJWTCustomClaims() method.
         return [];
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'user_id', 'id');
+    }
+
+
 }

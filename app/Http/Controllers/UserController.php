@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\UserRepository;
@@ -31,7 +32,7 @@ class UserController extends Controller
         //$expire = JWTAuth::factory()->setTTL(120);
         $token = JWTAuth::attempt($credentials);    //透過JWTAuth::attempt來驗證email及password
         try {
-            if (! $token) {    //如果驗證失敗，回傳顯示無效
+            if (!$token) {    //如果驗證失敗，回傳顯示無效
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
         } catch (\JWTException $e) {
@@ -40,7 +41,7 @@ class UserController extends Controller
 
         return response()->json([
             'token' => $token,
-            ]);
+        ]);
     }
 
     //註冊資料
@@ -55,7 +56,7 @@ class UserController extends Controller
         ]);
 
         //如果輸入的資料不符合規範，則印出error message
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'error message' => $validator->errors(),
                 'erroe code' => 400]);
@@ -79,10 +80,10 @@ class UserController extends Controller
 
             $data = $this->jwtAuth();
 
-                return response()->json([
-                    'data' => $data,
-                    'massage' => 'success'
-                ]);
+            return response()->json([
+                'data' => $data,
+                'massage' => 'success'
+            ]);
 
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
@@ -122,7 +123,7 @@ class UserController extends Controller
         if ($this->jwtAuth()) {
             $data = $this->userRepository
                 ->deleteUser($request);
-            if($data == true){
+            if ($data == true) {
                 return response()->json([
                     'message' => 'has been deleted']);
             } else {
@@ -141,5 +142,30 @@ class UserController extends Controller
         } else {
             return null;
         }
+    }
+
+    public function sendMail()
+    {
+//        Mail::raw('測試使用Laravel寄信', function ($massage) {
+//            $massage->to('max_lin@owlting.com', 'test')->subject('success');
+//        });
+        $view = 'email.confirm';
+        $data = [123];
+        $from = 'bronzii.max@gmail.com';
+        $name = 'Max';
+        $to = 'max_lin@owlting.com';
+        $subject = 'test';
+
+
+//        Mail::send($view,$data,function($message) use ($from,$name,$to,$subject) {
+//            $message->from($from, $name)->to($to)->subject($subject);
+//        });
+
+        Mail::raw('Text to e-mail', function($message)
+        {
+            $message->from('bronzii.max@gmail.com', 'test');
+
+            $message->to('max_lin@owlting.com');
+        });
     }
 }
