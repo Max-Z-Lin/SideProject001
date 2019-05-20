@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateImageTable extends Migration
+class CreateCleanBoxTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateImageTable extends Migration
      */
     public function up()
     {
-        Schema::create('Image', function (Blueprint $table) {
+        Schema::create('CleanBox', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('file_name');
-            $table->string('size');
-            $table->string('url');
-            $table->integer('user_id');
-
+            $table->string('region');
+            $table->string('road');
+            $table->string('location');
+            $table->float('latitude',15,10);
+            $table->float('longitude',15,10);
+            $table->string('remarks');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateImageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Image');
+        Schema::dropIfExists('CleanBox');
     }
 }

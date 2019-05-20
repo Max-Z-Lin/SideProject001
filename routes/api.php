@@ -21,6 +21,12 @@ Route::post('register', 'UserController@register')->name('user.register');
 Route::post('login', 'UserController@login');
 
 Route::get('mail', 'UserController@sendMail');
+Route::get('export', 'UserController@exportData');
+Route::post('imports', 'UserController@importData');
+
+Route::group(['prefix' => 'cleanBox'], function(){
+    Route::post('/','CleanBoxController@postCleanBox');
+});
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('getUser', 'UserController@getAuthUser');

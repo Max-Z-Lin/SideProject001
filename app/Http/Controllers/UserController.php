@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\UserRepository;
 use JWTAuth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Export\ImageExport;
 use phpDocumentor\Reflection\Types\Boolean;
 
 
@@ -150,7 +152,7 @@ class UserController extends Controller
 //            $massage->to('max_lin@owlting.com', 'test')->subject('success');
 //        });
         $view = 'email.confirm';
-        $data = [123];
+        $data = '寄送電子郵件訊息會大幅延長應用程式的回應時間，因此許多開發者選擇將郵件訊息加入隊列並於背景發送。 Laravel 使用內建 統一的 queue API ，讓您輕鬆地完成此工作。';
         $from = 'bronzii.max@gmail.com';
         $name = 'Max';
         $to = 'max_lin@owlting.com';
@@ -161,11 +163,18 @@ class UserController extends Controller
 //            $message->from($from, $name)->to($to)->subject($subject);
 //        });
 
-        Mail::raw('Text to e-mail', function($message)
+        Mail::raw($data, function($message)
         {
-            $message->from('bronzii.max@gmail.com', 'test');
 
-            $message->to('max_lin@owlting.com');
+            $message->from('bronzii.max@gmail.com');
+
+            $message->to('max_lin@owlting.com')->subject('test2')->cc('justice8105@owlting.com');
         });
     }
+
+    public function exportData()
+    {
+        return Excel::download(new ImageExport,'image_export.xlsx');
+    }
+
 }
